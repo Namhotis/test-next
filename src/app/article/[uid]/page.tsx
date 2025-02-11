@@ -9,6 +9,8 @@ import { components } from "@/slices";
 
 type Params = { uid: string };
 
+export const revalidate = 60;
+
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { uid } = await params;
   const client = createClient();
@@ -51,24 +53,4 @@ export async function generateStaticParams() {
   });
 
   return pages.map((page) => ({ uid: page.uid }));
-}
-
-// Ajout de getStaticProps pour définir la revalidation
-export async function getStaticProps({ params }: { params: Params }) {
-  const { uid } = params;
-  const client = createClient();
-  const page = await client
-    .getByUID("articlepage", uid)
-    .catch(() => notFound());
-
-  if (!page) {
-    return { notFound: true };
-  }
-
-  return {
-    props: {
-      pageData: page.data,
-    },
-    revalidate: 60, // Définit la revalidation ici, chaque 60 secondes
-  };
 }
