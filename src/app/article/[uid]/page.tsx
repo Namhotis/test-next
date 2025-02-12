@@ -32,7 +32,6 @@ export async function generateMetadata({
   const page = await client
     .getByUID("articlepage", uid)
     .catch(() => notFound());
-  console.log(page);
 
   return {
     title: "test",
@@ -46,7 +45,6 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const client = createClient();
-
   // Get all pages from Prismic, except the homepage.
   const pages = await client.getAllByType("articlepage", {
     filters: [filter.not("my.page.uid", "home")],
