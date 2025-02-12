@@ -10,9 +10,10 @@ import { components } from "@/slices";
 type Params = { uid: string };
 
 export const revalidate = 60;
+export const dynamicParams = true; // (ou 'force-dynamic' si tu veux une refetch immédiate)
 
-export default async function Page({ params }: { params: Promise<Params> }) {
-  const { uid } = await params;
+export default async function Page({ params }: { params: Params }) {
+  const { uid } = params;
 
   const client = createClient();
   const page = await client.getByUID("articlepage", uid).catch((err) => {
