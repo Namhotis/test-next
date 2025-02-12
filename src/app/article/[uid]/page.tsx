@@ -15,9 +15,13 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const { uid } = await params;
 
   const client = createClient();
-  const page = await client
-    .getByUID("articlepage", uid)
-    .catch(() => notFound());
+  const page = await client.getByUID("articlepage", uid).catch((err) => {
+    console.log(err);
+    return notFound();
+  });
+  // console.log(page.data);
+
+  // console.log(page);
 
   // <SliceZone> renders the page's slices.
   return <SliceZone slices={page.data.slices} components={components} />;
@@ -33,10 +37,18 @@ export async function generateMetadata({
   const page = await client
     .getByUID("articlepage", uid)
     .catch(() => notFound());
-  console.log(page);
+  // console.log(page);
+
+  // console.log(
+  //   await client.getAllByType("articlepage", {
+  //     filters: [filter.not("my.page.uid", "home")],
+  //   })
+  // );
+
+  // console.log(page.data);
 
   return {
-    title: "test",
+    title: "",
     description: page.data.meta_description,
     openGraph: {
       title: page.data.meta_title ?? undefined,
@@ -52,6 +64,8 @@ export async function generateStaticParams() {
   const pages = await client.getAllByType("articlepage", {
     filters: [filter.not("my.page.uid", "home")],
   });
+  // console.log("??");
+  // console.log(pages);
 
   return pages.map((page) => ({ uid: page.uid }));
 }
