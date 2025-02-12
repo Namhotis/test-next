@@ -12,7 +12,7 @@ type Params = { uid: string };
 export const revalidate = 60;
 
 export default async function Page({ params }: { params: Params }) {
-  const { uid } = await params;
+  const { uid } = params;
   const client = createClient();
 
   const page = await client
