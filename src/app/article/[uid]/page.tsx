@@ -11,9 +11,10 @@ type Params = { uid: string };
 
 export const revalidate = 60;
 
-export default async function Page({ params }: { params: Promise<Params> }) {
+export default async function Page({ params }: { params: Params }) {
   const { uid } = await params;
   const client = createClient();
+
   const page = await client
     .getByUID("articlepage", uid)
     .catch(() => notFound());
@@ -25,7 +26,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<Params>;
+  params: Params;
 }): Promise<Metadata> {
   const { uid } = await params;
   const client = createClient();
