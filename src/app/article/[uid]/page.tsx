@@ -11,10 +11,10 @@ type Params = { uid: string };
 
 export const revalidate = 60;
 
-export default async function Page({ params }: { params: { uid: string } }) {
-  const { uid } = params;
-  const client = createClient();
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const { uid } = await params;
 
+  const client = createClient();
   const page = await client
     .getByUID("articlepage", uid)
     .catch(() => notFound());
@@ -26,13 +26,14 @@ export default async function Page({ params }: { params: { uid: string } }) {
 export async function generateMetadata({
   params,
 }: {
-  params: Params;
+  params: Promise<Params>;
 }): Promise<Metadata> {
   const { uid } = await params;
   const client = createClient();
   const page = await client
     .getByUID("articlepage", uid)
     .catch(() => notFound());
+  console.log(page);
 
   return {
     title: "test",
@@ -46,6 +47,7 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const client = createClient();
+
   // Get all pages from Prismic, except the homepage.
   const pages = await client.getAllByType("articlepage", {
     filters: [filter.not("my.page.uid", "home")],
