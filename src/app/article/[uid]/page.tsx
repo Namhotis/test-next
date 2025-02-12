@@ -11,7 +11,7 @@ type Params = { uid: string };
 
 export const revalidate = 60;
 
-export default async function Page({ params }: { params: Params }) {
+export default async function Page({ params }: { params: { uid: string } }) {
   const { uid } = params;
   const client = createClient();
 
