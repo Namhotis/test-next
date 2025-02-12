@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: Params }) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<Params>;
+  params: Params;
 }): Promise<Metadata> {
   const { uid } = await params;
   const client = createClient();
